@@ -1,14 +1,22 @@
 # Specify the minimum version of CMake required
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.12.0)
 
 # Define your project name and the programming language used
-project(example C)
+project(cascade_web_server C CXX)
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+
+find_package(nlohmann_json 3.2.0 REQUIRED)
+find_package(OpenSSL REQUIRED)
+find_package(spdlog 1.3.1 REQUIRED)
+find_package(derecho CONFIG REQUIRED)
+find_package(cascade CONFIG REQUIRED)
 
 # Option to enable Mongoose build options
 option(ENABLE_MONGOOSE "Enable Mongoose build options" ON)
 
 # Source files to include in the build
-set(SOURCES main.c mongoose.c)
+set(SOURCES main.cpp mongoose.c)
 
 # Compiler flags
 # set(CMAKE_C_FLAGS "-W -Wall -Wextra -g -I.")
@@ -27,6 +35,11 @@ endif()
 
 # Add an executable target based on the source files
 add_executable(${PROJECT_NAME} ${SOURCES})
+
+set_target_properties(cascade_web_server PROPERTIES
+    INTERFACE_INCLUDE_DIRECTORIES ${cascade_INCLUDE_DIRS}
+)
+target_link_libraries(cascade_web_server derecho::cascade)
 
 # Target-specific compile options
 target_compile_options(${PROJECT_NAME} PRIVATE ${CMAKE_C_FLAGS})
