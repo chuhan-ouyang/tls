@@ -68,32 +68,7 @@ static const char *s_tls_cert =
 // client.key
 static const char *s_tls_key = 
 "-----BEGIN PRIVATE KEY-----\n"
-"MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDG0NbtOsc4977I\n"
-"BJJaRUsUBPUFbG4zF4t19fGxiZSRCvLkd2Rh+Zl02O9rvlt94EENyA/BUxo6+cwC\n"
-"tGPn8Sb1cU/zzRcY9RQmom47KO0msMM1MM/dNfAyEjUm85kFmy2Tjj3D6f7+UpmI\n"
-"w5oLW45R4SXj4UUIglR31zA5B3fOoKWg84ZNmbP8NVrIi5gQYlmPkVCyO/5IUAqg\n"
-"DLPOehdM7sFwr2QY7/lN/b2S2jlncFES3kk1LLme/cfYoyzp+Zoim0QZyUmRdI9X\n"
-"TUIDLaARoTDab5ouSpeWlL6BnwaJVZaPG85J7c8SSNBDM15M6z6KTeGvNeYgwctV\n"
-"tXGl9skNAgMBAAECggEADW4QBqhgysVZetNsO3LQ1oJbNsmTTBo8DnTVpcOAaKfP\n"
-"roUuH7wnlJAO5D1QmtkqK88m2U1OyUsUb95VnVZZ5lyIJRTmiYYMnWt9fLuQAXwR\n"
-"Q6ePcwbwucEnHAF6hblsw7npDDHjSrSzsFxeLIQ7weYulA0kh6WeJRZBKKkLe8aZ\n"
-"zrulMeNxRYDjgXZWGDy3zWYHRqiwOxXblNJSwjFz0woWURIF06pi54Oitj98poty\n"
-"6Dt7lCMd+2oKpU1/f4VPmz1VOZcNaIpJcThhA35Pz1sWStaHaLj8beYxSjtSiS8i\n"
-"OVj+cpR/wYvcDYS4Dss2aPpq0slPDpaPO+h2UbiHdQKBgQDgFjF2C5+c8uK2Ayzm\n"
-"e5cHBW2VGmP0MIpdLUG2sPMvbbx3o3Z2K5s3XHg5VkzUgWa3HfVgVrAmWfsw7EbL\n"
-"PU/exIZQyhqnHZJUZnKZYQSanT/3O3zpQLY7mmmZoYCiFmOZB8rFXY89G4uhL2OG\n"
-"lcPBnCeF1D3WWbkyI4XemOmJjwKBgQDjIVA01NIQgU31iPMpP/kPr1UFKsjHjA6d\n"
-"2oo/LoQSOwfhajP2VHtpL06u+jaaCixx5qltMv1KjOM+bZiIeauwz6hTE8HkHB63\n"
-"4CcI3WoAU8V1pk1oSGchPU22sMfljB5+VthN0eNDfXCzteoBQ21F+86WxO3kpP7k\n"
-"zoJ8MuEdowKBgQCYbSA53tA0r1adXm2VXe4ufXe725awDLChjt5LSfQxh+CSNOOo\n"
-"oCLVtpWk0toyFs9qsfsuC+mIPN7LuXyyVMNWkbGXlNIqaMgXlxRO1pqOHXbcUl+2\n"
-"Pil3Q6KfOSdJmhcnihBYzjpX47vH6Xc2nfrpYLHVq7hgbOm3fEhcUQFSawKBgQCq\n"
-"OURgZAQPpKkl1P7QsoZaMACbP8Z8b0ZhHfGwio8nDqDIWw0Yl5Zqba8dyp7zcZ5/\n"
-"uuzNz4Ivxklld0PzPKTlfaxcnxkYec635kG7Dh4sopwBoaKv/lt0ePpuai1Wp14P\n"
-"N80i/aPC6Bd4SGVZjwwtgBwDuRHF47a5CuCWbpdy2wKBgCoqeeg/h6lwtNlexQHp\n"
-"xJunEagQjTo9FoGQgxfkfqtvD7dA2Xv8EisInSZGfXHfyxAgyQc6vxicQlrNIole\n"
-"3oZNwddDBikbWcuUyzfQ7KWRDy/QYaGcTi6j4RZ+zka3vuxqJx48gSCtM5ou63WF\n"
-"DYr1lOJ+9MOo/HBUF+WA5nT4\n"
+" "
 "-----END PRIVATE KEY-----\n";
 
 // Print HTTP response and signal that we're done
