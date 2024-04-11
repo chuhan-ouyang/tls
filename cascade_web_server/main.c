@@ -17,7 +17,6 @@
 
 static const char *s_http_addr = "http://127.0.0.1:8000";    // HTTP port
 static const char *s_https_addr = "https://127.0.0.1:8443";  // HTTPS port
-static const char *s_root_dir = ".";
 
 // Self signed certificates
 // https://mongoose.ws/documentation/tutorials/tls/#self-signed-certificates
@@ -117,46 +116,36 @@ static void fn(struct mg_connection *c, int ev, void *ev_data) {
   // accept http request
   if (ev == MG_EV_HTTP_MSG) {
     struct mg_http_message *hm = (struct mg_http_message *) ev_data;
-    if (mg_http_match_uri(hm, "/api/stats")) {
-      // Print some statistics about currently established connections
-      mg_printf(c, "HTTP/1.1 200 OK\r\nTransfer-Encoding: chunked\r\n\r\n");
-      mg_http_printf_chunk(c, "ID PROTO TYPE      LOCAL           REMOTE\n");
-      for (struct mg_connection *t = c->mgr->conns; t != NULL; t = t->next) {
-        mg_http_printf_chunk(c, "%-3lu %4s %s %M %M\n", t->id,
-                             t->is_udp ? "UDP" : "TCP",
-                             t->is_listening  ? "LISTENING"
-                             : t->is_accepted ? "ACCEPTED "
-                                              : "CONNECTED",
-                             mg_print_ip, &t->loc, mg_print_ip, &t->rem);
+    if (mg_http_match_uri(hm, "/cascade/put")) {
+      // parse key value
+      struct mg_str json = hm->body;
+      double num1, num2;
+      if (mg_json_get_num(json, "$[0]", &num1) &&
+          mg_json_get_num(json, "$[1]", &num2)) {
+        // Success! create a JSON response
+        mg_http_reply(c, 200, "Content-Type: application/json\r\n",
+                      "{%m: %g, %g}\n",
+                      MG_ESC("Received Key Value"), num1, num2);
+         }
+      // capi
+      // message
+    } else if (mg_http_match_uri(hm, "/cascade/get")) {
+      // parse key
+      struct mg_str json = hm->body;
+      double num1;
+      if (mg_json_get_num(json, "$[0]", &num1)) {
+        // Success! create a JSON response
+        mg_http_reply(c, 200, "Content-Type: application/json\r\n", "{%m : %g}\n",
+                      MG_ESC("Received Key"), num1);
       }
-      mg_http_printf_chunk(c, "");  // Don't forget the last empty chunk
-    } else if (mg_http_match_uri(hm, "/api/f2/*")) {
-      mg_http_reply(c, 200, "", "{\"result\": \"%.*s\"}\n", (int) hm->uri.len,
-                    hm->uri.ptr);
-    } else if (mg_http_match_uri(hm, "/api/headers")) {
-      struct mg_http_message *hm = (struct mg_http_message *) ev_data;
-      size_t i, max = sizeof(hm->headers) / sizeof(hm->headers[0]);
-      // Send HTTP response line and Headers
-      mg_printf(c, "%s%s%s\r\n",
-                "HTTP/1.1 200 OK\r\n",               // Output response line
-                "Transfer-Encoding: chunked\r\n",  // Chunked header
-                "Content-Type: text/plain\r\n");    // and Content-Type header
-      mg_printf(c, "Request headers:\n");
-      // Iterate over request headers, and print them one by one
-      for (i = 0; i < max && hm->headers[i].name.len > 0; i++) {
-        struct mg_str *k = &hm->headers[i].name, *v = &hm->headers[i].value;
-        // Use printf_chunk for chunkned http reply
-        mg_http_printf_chunk(c, "%.*s -> %.*s\n", (int) k->len, k->ptr, (int) v->len, v->ptr);
-      }
-      mg_http_write_chunk(c, "", 0);  // Final empty chunk
-    } else {
-      // show current directories
-      struct mg_http_serve_opts opts = {.root_dir = s_root_dir};
-      mg_http_serve_dir(c, ev_data, &opts);
+      // capi
+      // message
+    } else if (mg_http_match_uri(hm, "/cascade")) {
+      MG_INFO(("Matched to /cascade"));
+      mg_http_reply(c, 200, "", "commands: /cascade/get, /cascade/put\n");
     }
   }
   if (ev == MG_EV_TLS_HS) {
-    mg_printf(c, "EHLO myname\r\n");
     MG_INFO(("SERVER TLS handshake done! Sending EHLO again"));
   }
 }
