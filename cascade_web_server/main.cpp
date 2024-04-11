@@ -79,33 +79,7 @@ static const char *s_tls_cert =
 // server.key
 static const char *s_tls_key =
 "-----BEGIN PRIVATE KEY-----\n"
-"MIIEvwIBADANBgkqhkiG9w0BAQEFAASCBKkwggSlAgEAAoIBAQDtaQbgABdIFVMl\n"
-"crbzcFqbgZD+kOS03dNTJIjBo4HYESIRPsONEuiEZ8sixeTOiRrM1xH4Vwy6ogLV\n"
-"3+xwWfBdd+kd8LLG2aQSlp8PA6TMYSzguNIZArAEmEKFP7FLnN5hZE6dFn36K6GO\n"
-"GpQkk5ZPcBMEN9j6h6xgUDpPRHgLn7RH4FReXkSs6my+zKtbxe9j0/UJhxP2Q8aC\n"
-"PS4lO+kCPEGtBHT9EXNDcjYF3WeJAU4JGjF7FGAu/E5y0Z537rpfnHRN4DECjNt3\n"
-"lH1ldTUCamkaxumiV2om9yveTaGKEKZRiLrVssFDVhL71YAjK1GSj3hY+KGVC47/\n"
-"0SXPP8vlAgMBAAECggEAdDYE94ET5GUL3jjY9TD6KUSzBOlICoDLANfRWXgABxPb\n"
-"6TUf495tkuJ7vPnBlpfmVn6wfS+fO3wyhx6lThm4XwhjRBSeblf6yF6SXXcbJDAt\n"
-"F5NgxH1cS+N8LF2RG8Id2O6QzLRF1j+lRTodagoUea4SoO31eC0RY9Phtwt897Kz\n"
-"2W97yjvXw07kS8Q8ypvLJ+KI089ZcakTXjsIzpy4oyzNxz6tucND5rnCcNitkr7H\n"
-"0cBzrP0dqEhpPkpwvawnA0GAqvxJArfnPgSF8pphX2z1O/yt8trVGHHtplJEC1lM\n"
-"7oF5bBvF5L+Ufjcct7tTiLo0HhdgWQaw9Rdltuc1wQKBgQDybCNafaguVwo4OI9N\n"
-"y0PC/wOreF5QkY3+NSN/JQwL1la1ScnjH0JAPKGCBtEtEFbNFA6bGuS74mQQ1NvN\n"
-"g/g05seKbJFO/XCIksqOmZOzlNjd6X79rukFShI988TaeTUMbFMsZssG0/Qu2d5I\n"
-"FKtoG7DHmq4Bh1GJZiCI4x36AwKBgQD6tQY5IUHBDSwdVD+Ybz4zg7sWME/bAZwU\n"
-"FdPJOdrFS8YA7YkNxvJUhuXTMYVITCJwe21Y+0/cLiiCAB4LHFW73mXMzAJ/dVWz\n"
-"X4YaR1h47D2/eGJFttcoD4cJC9wSCJRquAXeQMVdvBMqgJy71RtWV/07NfbhCjkc\n"
-"voXhoNMx9wKBgQCvDGze29uEUq97d0PrPbpZZMFmoM0hymjIxeAy4DJ5nbUQxQ51\n"
-"5U12ixFojbmfm6vB/Bir4ViHXus4yCtLlF62/Gnbx5eJfTI0PCLto3Hm+7U5UHC1\n"
-"iAaVHi5b89kSlPE8XkAU0MkLziMFbaa3T82RqGUXTNcXHXpAB7G4hp9PtwKBgQCh\n"
-"2Z3z4eF2RQ+2u3325dItJZzxHS1ggLCHUvQP03bFqj5guPii2U32fcP/TNfzrZsK\n"
-"LNSR/mQ3C+GA05yRpbA/gbsMtKPkLxatnzyO2IJoRnMymgAva3OJXETb9TkUt09B\n"
-"eh3ntr7z3YguByuoI1LrshA8WoFQFO57/Q+nctEFTwKBgQDJBSy82wDoMLkkHCsc\n"
-"wmkPa06qFQ453brwOplHvH9fhEUPHmELx/cu16frbMD0G5uxyvweh0mmX4ImGavL\n"
-"wfZzrx5FqROJ359o71NiSLzHZrKCwR6Ecr4pXpSPzyTgtM5m1R9L9GAGhFzSqyFV\n"
-"t7Hlg6z7p7csKxNvI3sJmbM6/A==\n"
-"-----END PRIVATE KEY-----\n";
+" ";
 
 // We use the same event handler function for HTTP and HTTPS connections
 // fn_data is NULL for plain HTTP, and non-NULL for HTTPS
