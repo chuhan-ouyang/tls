@@ -13,7 +13,7 @@
 //    2. curl -k https://127.0.0.1:8443
 
 #include "mongoose.h"
-#define TLS_TWOWAY
+// #define TLS_TWOWAY
 
 static const char *s_http_addr = "http://127.0.0.1:8000";    // HTTP port
 static const char *s_https_addr = "https://127.0.0.1:8443";  // HTTPS port

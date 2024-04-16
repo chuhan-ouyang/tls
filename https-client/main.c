@@ -8,20 +8,19 @@
 // To enable SSL/TLS, , see https://mongoose.ws/tutorials/tls/#how-to-build
 
 #include "mongoose.h"
-#define TLS_TWOWAY
+// #define TLS_TWOWAY
 
 // The very first web page in history. You can replace it from command line
 static const char *s_url = "https://127.0.0.1:8443";
 static const char *s_post_data = NULL;      // POST data
 static const uint64_t s_timeout_ms = 1500;  // Connect timeout in milliseconds
 
-#ifdef TLS_TWOWAY
-
 // ca.crt
 static const char *s_tls_ca = 
 "";
-#endif
 
+
+#ifdef TLS_TWOWAY
 // client.crt
 static const char *s_tls_cert = 
 "";
@@ -29,6 +28,7 @@ static const char *s_tls_cert =
 // client.key
 static const char *s_tls_key = 
 "";
+#endif
 
 // Print HTTP response and signal that we're done
 static void fn(struct mg_connection *c, int ev, void *ev_data) {
@@ -46,11 +46,12 @@ static void fn(struct mg_connection *c, int ev, void *ev_data) {
 
     if (mg_url_is_ssl(s_url)) {
        struct mg_tls_opts opts = {
-    #ifdef TLS_TWOWAY
             .ca = mg_str(s_tls_ca),
-    #endif
+    #ifdef TLS_TWOWAY
             .cert = mg_str(s_tls_cert),
-            .key = mg_str(s_tls_key)};
+            .key = mg_str(s_tls_key)
+    #endif
+    };
         mg_tls_init(c, &opts);
     }
 
