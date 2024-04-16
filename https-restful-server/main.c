@@ -73,32 +73,7 @@ static const char *s_tls_cert =
 // server.key
 static const char *s_tls_key = 
 "-----BEGIN PRIVATE KEY-----\n"
-"MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCjhywGbw4jUY4/\n"
-"uEM1NsBI4uN5QxKMR5JGa6fo9N52405Lu0APFWtjw3pIMhCmo9gvfUv+znlvgWOX\n"
-"45/nqbpp+cSewVfzRTdBScZjMjFlDth//VjtPmlo7/g6/QJz7l2MRwWOewH/c6uW\n"
-"qLJCkModokJ+ZS7HvXRwuHQe+7bWjNC1c4s2fDPmsbVsiqulqd/KY8KXpUyPNrrV\n"
-"ewghN2hmlddmExWHetxbruaj9YowmYGb/fe49SbPbAihzeG4PMcf05jrRB/gp0t8\n"
-"roso9hMtiy+LClf9NMHByyGPCNvydTDlibP1rDn0NGV8UAotmneV/vzTEH6smRJD\n"
-"eJMOWFbvAgMBAAECggEAFRlzzMC3ikcTm5Ui1tLhrIXZ4+OLmR4C+aMaXyx5J83c\n"
-"ZFkcwtV4rb6jIH2VOGsbkcUQ8Sei84g2WXq9Px7fNp1LiVBZEMJ1hq8GMfZf+TIZ\n"
-"LSp7NuE+qJON686JanvvBhKD3QZyE4vRL/dESOJ1sa0l9zkG+C6xv3mNQhIoXTZI\n"
-"8TYu28pxzTf+I8JnD10ltokaDxGDRpfwxppzOWZZbkG2DCbUk+1T/DIhSPEckkvl\n"
-"kHtrmrscINAP+fme4x3mKXoxtJkcR+uqdM7ZpOW4iTBG2wR51t+IivDUCiMxy14E\n"
-"7nrSDdH+lfMjdxne1BYyzpgIGzKSOodErMgBtDTwgQKBgQDlkvUS5jKfloi5KU5K\n"
-"qJgf3G7d4mLEKw5WRT+bulB7Azegs/3cWyVN2krDl7EYwlP6QFX8NBMRA2Dy3jgD\n"
-"Rgsj3Un3wgNBbvIz6Cnpu0G/NlwPGgFSwmUOzBlJhWq1TmQFTMkwdlbTg+0dmCMO\n"
-"Zm4IwCHG8NBHk5e5S5e6qzLxhwKBgQC2Wfuuv2pZOk7oiAC2rAyCiu9ODsONO18l\n"
-"4QcN1FOWTP2wlZkyjOmKV4xq4wWMNhF2B5WxtKJsJFFMMjhbCHO33YgUe4OwJ1rs\n"
-"dIJBZ+k0RWNwgiFVx3wo1XD3buDgsKq2evgzy76fHSdErMszD3AJ7+9qGaHlztkq\n"
-"1CJIo15pWQKBgQC1nlBB1lmARW/+xD3K9Jv8wL/4y6uFM+bQu1H6GiinWME+YobY\n"
-"OEdH0wVIvY3+X2ZeWV1s+6mF0R12pfS8KkKP6fYliphWwLXd+LKH1XvLEO89hz46\n"
-"wc1/Klpq/qCPtOeOBdQ4gbZo+TqyKfS55LDyPUW7hDHSHmJu1e3AYMYZqwKBgDI+\n"
-"tRS/dYREhr2Xy+qJmaDWu32cn9FojJ0ZViI/YRDHAhgIAIBnR2pxGSXSjBLISyNk\n"
-"j6C5jw+RKj1+kPy0ZX5CMl7CcdS1413H9KQlB6L5g57anGjQYKu3tDrZeGkxBLjn\n"
-"RUCwYUPiepF3sz3MgSibzjJEAdIansgoT5IIQdlxAoGBAIbLOwWdICXc4E0MTuAv\n"
-"pGiA9yyg4nmjlKduJRCMKfHFNzAg3u0QHf5jrRT+rmj8whsJBkoPCpJzS8F5u35l\n"
-"b2qszlEwcfknXHIIsge0B1Ct3HBSpVVJLWoHtHLDQQO0RZnq5g5HbZY0uFQy0jdu\n"
-"ugD1F6ZLky3Hr3Q6pnO6mRQK\n"
+ 
 "-----END PRIVATE KEY-----\n";
 
 // We use the same event handler function for HTTP and HTTPS connections
