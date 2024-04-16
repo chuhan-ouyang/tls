@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Base directory for all certs
-BASE_CERT_DIR="certs"
+BASE_CERT_DIR="../certs"
 
 # Specific directories for CA, client, and server certs
 CA_DIR="$BASE_CERT_DIR/ca"

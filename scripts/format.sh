@@ -1,5 +1,10 @@
 #!/bin/bash
 
+if [ "$#" -ne 1 ]; then
+    echo "Usage: ./format.sh <directory>"
+    exit 1
+fi
+
 # Define the format_file function
 format_file() {
     local input_file="$1"
@@ -12,10 +17,10 @@ format_file() {
 }
 
 # Base directory containing the files and subdirectories to format
-base_directory="certs"
+base_directory=$1
 
 # Directory to store formatted files, mirroring the structure of base_directory
-output_base_directory="formatted_certs"
+output_base_directory=$base_directory
 
 # Use find to iterate over each file within base_directory and its subdirectories
 while IFS= read -r input_file; do
