@@ -1835,8 +1835,11 @@ struct packed_file {
 #if MG_ENABLE_PACKED_FS
 #else
 const char *mg_unpack(const char *path, size_t *size, time_t *mtime) {
+  printf("\n Entered mg_unpack \n");
   *size = 0, *mtime = 0;
+  printf("\n After *size = 0 \n");
   (void) path;
+  printf("\n Exit mg_unpack \n");
   return NULL;
 }
 const char *mg_unlist(size_t no) {
@@ -1846,8 +1849,11 @@ const char *mg_unlist(size_t no) {
 #endif
 
 struct mg_str mg_unpacked(const char *path) {
+  printf("\n Entered mg_unpacked\n");
   size_t len = 0;
-  const char *buf = mg_unpack(path, &len, NULL);
+  time_t mtime = 0;
+  const char *buf = mg_unpack(path, &len, &mtime);
+  printf("\n Exit mg_unpacked \n");
   return mg_str_n(buf, len);
 }
 
@@ -11297,7 +11303,7 @@ void mg_tls_ctx_free(struct mg_mgr *mgr) {
 #define REPEATM(N, macro) EVAL(REPEATM_SOME(N, macro))
 #endif
 
-// 
+//
 
 #if (MG_UECC_WORD_SIZE == 1)
 #if MG_UECC_SUPPORTS_secp160r1
@@ -15453,7 +15459,7 @@ static bool mg_tcpip_driver_imxrt_init(struct mg_tcpip_if *ifp) {
   int cr = (d == NULL || d->mdc_cr < 0) ? 24 : d->mdc_cr;
   ENET->MSCR = (1 << 8) | ((cr & 0x3f) << 1);  // HOLDTIME 2 clks
   struct mg_phy phy = {enet_read_phy, enet_write_phy};
-  mg_phy_init(&phy, d->phy_addr, MG_PHY_LEDS_ACTIVE_HIGH); // MAC clocks PHY  
+  mg_phy_init(&phy, d->phy_addr, MG_PHY_LEDS_ACTIVE_HIGH); // MAC clocks PHY
   // Select RMII mode, 100M, keep CRC, set max rx length, disable loop
   ENET->RCR = (1518 << 16) | MG_BIT(8) | MG_BIT(2);
   // ENET->RCR |= MG_BIT(3);     // Receive all

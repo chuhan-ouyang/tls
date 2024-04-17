@@ -12,10 +12,10 @@ format_file() {
 }
 
 # Base directory containing the files and subdirectories to format
-base_directory="certs"
+base_directory="new_certs"
 
 # Directory to store formatted files, mirroring the structure of base_directory
-output_base_directory="formatted_certs"
+output_base_directory="new-formatted_certs"
 
 # Use find to iterate over each file within base_directory and its subdirectories
 while IFS= read -r input_file; do
