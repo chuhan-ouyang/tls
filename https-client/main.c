@@ -8,9 +8,8 @@
 // To enable SSL/TLS, , see https://mongoose.ws/tutorials/tls/#how-to-build
 
 #include "mongoose.h"
-// #define TLS_TWOWAY
+#define TLS_TWOWAY
 
-#define line = "------------------------------\n";
 // The very first web page in history. You can replace it from command line
 static const char *s_url = "https://127.0.0.1:8443";
 // static const char *s_url = "http://127.0.0.1:8000";
@@ -30,26 +29,25 @@ static void fn(struct mg_connection *c, int ev, void *ev_data) {
   } else if (ev == MG_EV_CONNECT) {
     // Connected to server. Extract host name from URL
     struct mg_str host = mg_url_host(s_url);
-
     if (mg_url_is_ssl(s_url)) {
-      // String Way
-    //    struct mg_tls_opts opts = {
-    //         .ca = mg_str(s_tls_ca),
-    //         // .ca = mg_unpacked("../certs/ca/ca.crt"),
-    // #ifdef TLS_TWOWAY
-    //         .cert = mg_str(s_tls_cert),
-    //         .key = mg_str(s_tls_key)
-    // #endif
-    //    };
-
-    // Pem way
-        struct mg_str ca = mg_file_read(&mg_fs_posix, "ca.pem");
-        struct mg_tls_opts opts = {.ca = ca};
+        struct mg_str ca = mg_file_read(&mg_fs_posix, "../certs/ca.pem");
+      #ifdef TLS_TWOWAY
+        struct mg_str cert = mg_file_read(&mg_fs_posix, "../certs/client-cert.pem");
+        struct mg_str key = mg_file_read(&mg_fs_posix, "../certs/client-key.pem");
+      #endif
+        struct mg_tls_opts opts = { 
+                                   .ca = ca,
+                                #ifdef TLS_TWOWAY
+                                   .cert = cert,
+                                   .key = key
+                                #endif
+                                };
         mg_tls_init(c, &opts);
-        printf("----------------");
-        printf("\nFinished mg_tls_init\n");
-        printf("----------------\n");
-        // free(ca.ptr);
+        free((void*) ca.ptr);
+      #ifdef TLS_TWOWAY
+        free((void*) cert.ptr);
+        free((void*) key.ptr);
+      #endif
     }
     // Send request
     int content_length = s_post_data ? strlen(s_post_data) : 0;
@@ -62,25 +60,13 @@ static void fn(struct mg_connection *c, int ev, void *ev_data) {
               s_post_data ? "POST" : "GET", mg_url_uri(s_url), (int) host.len,
               host.ptr, content_length);
     mg_send(c, s_post_data, content_length);
-    printf("----------------");
-    printf("\nFinished mg_send\n");
-    printf("----------------\n");
   } else if (ev == MG_EV_HTTP_MSG) {
-    printf("----------------");
-    printf("\nGot to if (ev == MG_EV_HTTP_MSG)\n");
-    printf("----------------\n");
-
     // Response is received. Print it
     struct mg_http_message *hm = (struct mg_http_message *) ev_data;
     printf("%.*s", (int) hm->message.len, hm->message.ptr);
     c->is_draining = 1;        // Tell mongoose to close this connection
     *(bool *) c->fn_data = true;  // Tell event loop to stop
-
-    printf("----------------");
-    printf("\nExited if (ev == MG_EV_HTTP_MSG)\n");
-    printf("----------------\n");
   } else if (ev == MG_EV_ERROR) {
-    printf("\nError\n");
     *(bool *) c->fn_data = true;  // Error, tell event loop to stop
   }
 }

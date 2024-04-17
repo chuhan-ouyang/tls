@@ -13,40 +13,38 @@
 //    2. curl -k https://127.0.0.1:8443
 
 #include "mongoose.h"
-// #define TLS_TWOWAY
+#define TLS_TWOWAY
 
 static const char *s_http_addr = "http://127.0.0.1:8000";    // HTTP port
 static const char *s_https_addr = "https://127.0.0.1:8443";  // HTTPS port
-static const char *s_root_dir = ".";
 
 // Self signed certificates
 // https://mongoose.ws/documentation/tutorials/tls/#self-signed-certificates
 
 // We use the same event handler function for HTTP and HTTPS connections
 // fn_data is NULL for plain HTTP, and non-NULL for HTTPS
-static void fn(struct mg_connection *c, int ev, void *ev_data) {
+static void fn(struct mg_connection *c, int ev, void *
+ev_data) {
   if (ev == MG_EV_ACCEPT && c->fn_data != NULL) {
-    // String way
-    //     struct mg_tls_opts opts = {
-    // #ifdef TLS_TWOWAY
-    //         .ca = mg_str(s_tls_ca),
-    // #endif
-    //         .cert = mg_str(s_tls_cert),
-    //         .key = mg_str(s_tls_key)};
-    // Pem way
-    // TODO: modify
-        printf("\n before init \n");
-        struct mg_str cert = mg_file_read(&mg_fs_posix, "server-cert.pem");
-        struct mg_str key = mg_file_read(&mg_fs_posix, "server-key.pem");
-        struct mg_tls_opts opts = {.cert = cert,
+      #ifdef TLS_TWOWAY
+        struct mg_str ca = mg_file_read(&mg_fs_posix, "../certs/ca.pem");
+      #endif
+        struct mg_str cert = mg_file_read(&mg_fs_posix, "../certs/server-cert.pem");
+        struct mg_str key = mg_file_read(&mg_fs_posix, "../certs/server-key.pem");
+        struct mg_tls_opts opts = { 
+                                #ifdef TLS_TWOWAY
+                                   .ca = ca,
+                                #endif
+                                   .cert = cert,
                                    .key = key};
         mg_tls_init(c, &opts);
-        printf("\n passed MG_EV_ACCEPT \n");
-        // free(cert.ptr);
-        // free(key.ptr);
+      #ifdef TLS_TWOWAY
+        free((void*) ca.ptr);
+      #endif
+        free((void*) cert.ptr);
+        free((void*) key.ptr);
   }
   if (ev == MG_EV_HTTP_MSG) {
-    printf("\nEntered MG_EV_HTTP_MSG \n");
     struct mg_http_message *hm = (struct mg_http_message *) ev_data;
     if (mg_http_match_uri(hm, "/api/stats")) {
       // Print some statistics about currently established connections
@@ -65,9 +63,7 @@ static void fn(struct mg_connection *c, int ev, void *ev_data) {
       mg_http_reply(c, 200, "", "{\"result\": \"%.*s\"}\n", (int) hm->uri.len,
                     hm->uri.ptr);
     } else {
-      printf("\nEntered else case\n");
-      mg_http_reply(c, 200, "", "Hello, World!");
-      printf("\nSent simple message\n");
+      mg_http_reply(c, 200, "", "Cascade CBDC Server");
     }
   }
 }
