@@ -11,8 +11,8 @@
 #define TLS_TWOWAY
 
 // The very first web page in history. You can replace it from command line
-static const char *s_url = "https://127.0.0.1:8443";
-// static const char *s_url = "http://127.0.0.1:8000";
+// static const char *s_url = "https://127.0.0.1:8443";
+static const char *s_url = "http://127.0.0.1:8000";
 static const char *s_post_data = NULL;      // POST data
 static const uint64_t s_timeout_ms = 1500;  // Connect timeout in milliseconds
 
@@ -35,7 +35,7 @@ static void fn(struct mg_connection *c, int ev, void *ev_data) {
         struct mg_str cert = mg_file_read(&mg_fs_posix, "../certs/client-cert.pem");
         struct mg_str key = mg_file_read(&mg_fs_posix, "../certs/client-key.pem");
       #endif
-        struct mg_tls_opts opts = { 
+        struct mg_tls_opts opts = {
                                    .ca = ca,
                                 #ifdef TLS_TWOWAY
                                    .cert = cert,

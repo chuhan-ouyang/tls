@@ -13,36 +13,40 @@
 //    2. curl -k https://127.0.0.1:8443
 
 #include "mongoose.h"
+#include <string.h>
+
 #define TLS_TWOWAY
 
 static const char *s_http_addr = "http://127.0.0.1:8000";    // HTTP port
 static const char *s_https_addr = "https://127.0.0.1:8443";  // HTTPS port
 
-// Self signed certificates
-// https://mongoose.ws/documentation/tutorials/tls/#self-signed-certificates
+typedef struct {
+    char name[100]; // Assuming a fixed size for simplicity
+    int age;
+} Person;
 
 // We use the same event handler function for HTTP and HTTPS connections
 // fn_data is NULL for plain HTTP, and non-NULL for HTTPS
 static void fn(struct mg_connection *c, int ev, void *
 ev_data) {
   if (ev == MG_EV_ACCEPT && c->fn_data != NULL) {
-      #ifdef TLS_TWOWAY
-        struct mg_str ca = mg_file_read(&mg_fs_posix, "../certs/ca.pem");
-      #endif
-        struct mg_str cert = mg_file_read(&mg_fs_posix, "../certs/server-cert.pem");
-        struct mg_str key = mg_file_read(&mg_fs_posix, "../certs/server-key.pem");
-        struct mg_tls_opts opts = { 
-                                #ifdef TLS_TWOWAY
-                                   .ca = ca,
-                                #endif
-                                   .cert = cert,
-                                   .key = key};
-        mg_tls_init(c, &opts);
-      #ifdef TLS_TWOWAY
-        free((void*) ca.ptr);
-      #endif
-        free((void*) cert.ptr);
-        free((void*) key.ptr);
+      // #ifdef TLS_TWOWAY
+      //   struct mg_str ca = mg_file_read(&mg_fs_posix, "../certs/ca.pem");
+      // #endif
+      //   struct mg_str cert = mg_file_read(&mg_fs_posix, "../certs/server-cert.pem");
+      //   struct mg_str key = mg_file_read(&mg_fs_posix, "../certs/server-key.pem");
+      //   struct mg_tls_opts opts = {
+      //                           #ifdef TLS_TWOWAY
+      //                              .ca = ca,
+      //                           #endif
+      //                              .cert = cert,
+      //                              .key = key};
+      //   mg_tls_init(c, &opts);
+      // #ifdef TLS_TWOWAY
+      //   free((void*) ca.ptr);
+      // #endif
+      //   free((void*) cert.ptr);
+      //   free((void*) key.ptr);
   }
   if (ev == MG_EV_HTTP_MSG) {
     struct mg_http_message *hm = (struct mg_http_message *) ev_data;
@@ -63,7 +67,8 @@ ev_data) {
       mg_http_reply(c, 200, "", "{\"result\": \"%.*s\"}\n", (int) hm->uri.len,
                     hm->uri.ptr);
     } else {
-      mg_http_reply(c, 200, "", "Cascade CBDC Server");
+      Person* person = (Person*) c->fn_data;
+      mg_http_reply(c, 200, "", person->name);
     }
   }
 }
@@ -72,8 +77,13 @@ int main(void) {
   struct mg_mgr mgr;                            // Event manager
   mg_log_set(MG_LL_DEBUG);                      // Set log level
   mg_mgr_init(&mgr);                            // Initialise event manager
-  mg_http_listen(&mgr, s_http_addr, fn, NULL);  // Create HTTP listener
-  mg_http_listen(&mgr, s_https_addr, fn, (void *) 1);  // HTTPS listener
+
+  Person p;
+  strcpy(p.name, "John Doe");
+  p.age = 30;
+  mg_http_listen(&mgr, s_http_addr, fn, &p);  // Create HTTP listener
+
+  // mg_http_listen(&mgr, s_https_addr, fn, (void *) 1);  // HTTPS listener
   for (;;) mg_mgr_poll(&mgr, 1000);                    // Infinite event loop
   mg_mgr_free(&mgr);
   return 0;
