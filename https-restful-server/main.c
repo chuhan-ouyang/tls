@@ -23,47 +23,32 @@ static const char *s_https_addr = "https://127.0.0.1:8443";  // HTTPS port
 
 // We use the same event handler function for HTTP and HTTPS connections
 // fn_data is NULL for plain HTTP, and non-NULL for HTTPS
-static void fn(struct mg_connection *c, int ev, void *
-ev_data) {
-  if (ev == MG_EV_ACCEPT && c->fn_data != NULL) {
-      #ifdef TLS_TWOWAY
-        struct mg_str ca = mg_file_read(&mg_fs_posix, "../certs/ca.pem");
-      #endif
-        struct mg_str cert = mg_file_read(&mg_fs_posix, "../certs/server-cert.pem");
-        struct mg_str key = mg_file_read(&mg_fs_posix, "../certs/server-key.pem");
-        struct mg_tls_opts opts = { 
-                                #ifdef TLS_TWOWAY
-                                   .ca = ca,
-                                #endif
-                                   .cert = cert,
-                                   .key = key};
-        mg_tls_init(c, &opts);
-      #ifdef TLS_TWOWAY
-        free((void*) ca.ptr);
-      #endif
-        free((void*) cert.ptr);
-        free((void*) key.ptr);
-  }
+// Connection event handler function
+static void fn(struct mg_connection *c, int ev, void *ev_data) {
   if (ev == MG_EV_HTTP_MSG) {
     struct mg_http_message *hm = (struct mg_http_message *) ev_data;
-    if (mg_http_match_uri(hm, "/api/stats")) {
-      // Print some statistics about currently established connections
-      mg_printf(c, "HTTP/1.1 200 OK\r\nTransfer-Encoding: chunked\r\n\r\n");
-      mg_http_printf_chunk(c, "ID PROTO TYPE      LOCAL           REMOTE\n");
-      for (struct mg_connection *t = c->mgr->conns; t != NULL; t = t->next) {
-        mg_http_printf_chunk(c, "%-3lu %4s %s %M %M\n", t->id,
-                             t->is_udp ? "UDP" : "TCP",
-                             t->is_listening  ? "LISTENING"
-                             : t->is_accepted ? "ACCEPTED "
-                                              : "CONNECTED",
-                             mg_print_ip, &t->loc, mg_print_ip, &t->rem);
+    if (mg_http_match_uri(hm, "/get")) {
+      struct mg_str json = hm->body;  // The body of the HTTP message which contains JSON
+
+      // Allocate memory for res to store the JSON string
+      char *res = (char *)malloc(json.len + 1);  // +1 for the null terminator
+      if (res == NULL) {
+          printf("Memory allocation failed\n");
+          mg_http_reply(c, 500, "", "Internal Server Error\n");
+          return;
       }
-      mg_http_printf_chunk(c, "");  // Don't forget the last empty chunk
-    } else if (mg_http_match_uri(hm, "/api/f2/*")) {
-      mg_http_reply(c, 200, "", "{\"result\": \"%.*s\"}\n", (int) hm->uri.len,
-                    hm->uri.ptr);
+
+      // Copy the JSON data to res and null-terminate it
+      memcpy(res, json.ptr, json.len);
+      res[json.len] = '\0';  // Null-terminate the string
+
+      // Now you can use res as a regular null-terminated string
+      printf("Stored JSON: %s\n", res);
+
+      // Always remember to free dynamically allocated memory
+      free(res);
     } else {
-      mg_http_reply(c, 200, "", "Cascade CBDC Server");
+      mg_http_reply(c, 200, "", "Cascade CBDC Web Server\n");
     }
   }
 }
