@@ -24,33 +24,53 @@ static const char *s_https_addr = "https://127.0.0.1:8443";  // HTTPS port
 // We use the same event handler function for HTTP and HTTPS connections
 // fn_data is NULL for plain HTTP, and non-NULL for HTTPS
 // Connection event handler function
-static void fn(struct mg_connection *c, int ev, void *ev_data) {
-  if (ev == MG_EV_HTTP_MSG) {
-    struct mg_http_message *hm = (struct mg_http_message *) ev_data;
-    if (mg_http_match_uri(hm, "/get")) {
-      struct mg_str json = hm->body;  // The body of the HTTP message which contains JSON
+void handle_get_request(struct mg_connection *c, struct mg_http_message *hm) {
+    // The body of the request is expected to be in the format ['string']
+    char *received_string = mg_json_get_str(hm->body, "$[0]");  // Extract the first element in the JSON array
 
-      // Allocate memory for res to store the JSON string
-      char *res = (char *)malloc(json.len + 1);  // +1 for the null terminator
-      if (res == NULL) {
-          printf("Memory allocation failed\n");
-          mg_http_reply(c, 500, "", "Internal Server Error\n");
-          return;
-      }
+    if (received_string) {
+        // Print the received string to the console
+        printf("Received string: %s\n\n", received_string);
 
-      // Copy the JSON data to res and null-terminate it
-      memcpy(res, json.ptr, json.len);
-      res[json.len] = '\0';  // Null-terminate the string
-
-      // Now you can use res as a regular null-terminated string
-      printf("Stored JSON: %s\n", res);
-
-      // Always remember to free dynamically allocated memory
-      free(res);
+        // Send a response back to the client
+        mg_http_reply(c, 200, "Content-Type: text/plain\r\n", "Received: %s", received_string);
+        
+        // Free the dynamically allocated memory
+        free(received_string);
     } else {
-      mg_http_reply(c, 200, "", "Cascade CBDC Web Server\n");
+        // If parsing fails or the format is incorrect
+        printf("Failed to parse the incoming data.\n");
+        mg_http_reply(c, 400, "", "Bad Request\n");
     }
-  }
+}
+
+void handle_put_request(struct mg_connection *c, struct mg_http_message *hm) {
+    char *key = mg_json_get_str(hm->body, "$[0]");  // Get the first element in the JSON array
+    char *value = mg_json_get_str(hm->body, "$[1]");  // Get the second element in the JSON array
+
+    if (key && value) {
+        printf("Key: %s, Value: %s\n\n", key, value);
+    } else {
+        printf("Failed to parse key or value.\n");
+        mg_http_reply(c, 400, "", "Bad Request\n");
+    }
+
+    free(key);   // Free the dynamically allocated memory for key
+    free(value); // Free the dynamically allocated memory for value
+}
+
+// Renamed event handler to fn
+static void fn(struct mg_connection *c, int ev, void *ev_data) {
+    if (ev == MG_EV_HTTP_MSG) {
+        struct mg_http_message *hm = (struct mg_http_message *) ev_data;
+        if (mg_http_match_uri(hm, "/get")) {
+            handle_get_request(c, hm);
+        } else if (mg_http_match_uri(hm, "/put")) {
+            handle_put_request(c, hm);
+        } else {
+            mg_http_reply(c, 404, "", "Not Found\n");
+        }
+    }
 }
 
 int main(void) {
